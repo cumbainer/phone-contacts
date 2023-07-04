@@ -4,8 +4,10 @@ package ua.shtaiier.phonecontacts.rest;
 import com.ua.shtaiier.phonecontacts.dto.ContactDto;
 import com.ua.shtaiier.phonecontacts.rest.ContactsManagementApiDelegate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import ua.shtaiier.phonecontacts.api.ContactApi;
 
 import java.util.List;
 
@@ -13,29 +15,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContactsApiDelegate implements ContactsManagementApiDelegate {
 
+    private final ContactApi contactApi;
+
     @Override
-    public ResponseEntity<Void> addNew(ContactDto contactDto) {
-        return ContactsManagementApiDelegate.super.addNew(contactDto);
+    public ResponseEntity<ContactDto> addNew(ContactDto contactDto) {
+        return ResponseEntity.ok(contactApi.create(contactDto));
     }
 
     @Override
     public ResponseEntity<Void> delete(Integer id) {
-        return ContactsManagementApiDelegate.super.delete(id);
+        contactApi.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<ContactDto> get(String id) {
-        return ContactsManagementApiDelegate.super.get(id);
+    public ResponseEntity<ContactDto> get(Integer id) {
+        return ResponseEntity.ok(contactApi.get(id));
     }
 
     @Override
     public ResponseEntity<List<ContactDto>> getAll() {
-        return ContactsManagementApiDelegate.super.getAll();
+        return ResponseEntity.ok(contactApi.getAll());
     }
 
     @Override
-    public ResponseEntity<Void> update(Integer id, ContactDto contactDto) {
-        return ContactsManagementApiDelegate.super.update(id, contactDto);
+    public ResponseEntity<ContactDto> update(Integer id, ContactDto contactDto) {
+        return ResponseEntity.ok(contactApi.update(id, contactDto));
     }
 
 }
