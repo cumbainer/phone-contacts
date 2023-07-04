@@ -1,0 +1,132 @@
+openapi: 3.0.3
+info:
+  title: Phone Contacts Management
+#  description: todo
+  version: 1.0.0
+servers:
+  - url: http://localhost:3030/api/v1
+tags:
+#  - name: security-management
+#    description: Consist of creating an account and login
+  - name: contactsManagement
+    description: Basic CRUD for contacts management
+paths:
+  /contacts/getAll:
+    get:
+      tags:
+        - contactsManagement
+      summary: Get all contacts
+      operationId: getAll
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContactDto"
+
+  /contacts/{id}/get:
+    get:
+      tags:
+        - contactsManagement
+      description: Get specific contact by id
+      operationId: get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactDto"
+        404:
+          description: Not Found
+        400:
+          description: Bad Request
+
+  /contacts/new:
+    post:
+      tags:
+        - contactsManagement
+      operationId: addNew
+      description: Add new contact to contact list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactDto"
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+
+  /contacts/{id}/update:
+    put:
+      tags:
+        - contactsManagement
+      operationId: update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique identifier of a contact
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactDto"
+      responses:
+        200:
+          description: Updated
+        400:
+          description: Bad Request
+
+  /contacts/{id}/delete:
+    delete:
+      tags:
+        - contactsManagement
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Successfully deleted
+        400:
+          description: Invalid Id
+
+components:
+  schemas:
+    ContactDto:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        emails:
+          type: array
+          items:
+            type: string
+            pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+            uniqueItems: true
+        phoneNumbers:
+          type: array
+          items:
+            type: string
+            pattern: ^\+?\d+$
+            uniqueItems: true
