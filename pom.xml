@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.1</version>
+        <version>3.0.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ua.shtaiier</groupId>
@@ -45,10 +45,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-test</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -90,9 +95,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.4</version>
         </dependency>
         <dependency>
             <groupId>org.openapitools</groupId>
@@ -113,11 +118,6 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.4</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -164,7 +164,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>maven-replacer-plugin</artifactId>
@@ -184,12 +183,11 @@
                     <replacements>
                         <replacement>
                             <token>import org.openapitools.model</token>
-                            <value>import com.ua.shtaiier.phonecontacts.dto</value>
+                            <value>import ua.shtaiier.phonecontacts.dto</value>
                         </replacement>
                     </replacements>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -203,10 +201,9 @@
                             <inputSpec>
                                 ${project.basedir}/src/main/resources/openapi.yaml
                             </inputSpec>
-<!--                            <output>${project.build.directory}/generated-sources</output>-->
                             <generatorName>spring</generatorName>
-                            <apiPackage>com.ua.shtaiier.phonecontacts.rest</apiPackage>
-                            <modelPackage>com.ua.shtaiier.phonecontacts.dto</modelPackage>
+                            <apiPackage>ua.shtaiier.phonecontacts.rest</apiPackage>
+<!--                            <modelPackage>ua.shtaiier.phonecontacts.dto</modelPackage>-->
                             <supportingFilesToGenerate>
                                 ApiUtil.java
                             </supportingFilesToGenerate>

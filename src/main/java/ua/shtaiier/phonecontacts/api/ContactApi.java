@@ -1,6 +1,6 @@
 package ua.shtaiier.phonecontacts.api;
 
-import com.ua.shtaiier.phonecontacts.dto.ContactDto;
+import ua.shtaiier.phonecontacts.dto.ContactDto;
 
 import java.util.List;
 

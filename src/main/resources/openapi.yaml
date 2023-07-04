@@ -4,7 +4,7 @@ info:
 #  description: todo
   version: 1.0.0
 servers:
-  - url: http://localhost:3030/api/v1
+  - url: 'http://localhost:3030/api/v1'
 tags:
 #  - name: security-management
 #    description: Consist of creating an account and login
@@ -125,7 +125,7 @@ components:
       properties:
         name:
           type: string
-          nullable: true
+#          nullable: true
         emails:
           type: array
           items:

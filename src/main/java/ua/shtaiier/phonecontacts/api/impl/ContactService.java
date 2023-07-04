@@ -1,7 +1,9 @@
 package ua.shtaiier.phonecontacts.api.impl;
 
-import com.ua.shtaiier.phonecontacts.dto.ContactDto;
+import ua.shtaiier.phonecontacts.dto.ContactDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import ua.shtaiier.phonecontacts.api.ContactApi;
 import ua.shtaiier.phonecontacts.domain.Contact;
@@ -27,9 +29,9 @@ public class ContactService implements ContactApi {
 
     @Override
     public ContactDto update(int id, ContactDto contactDto) {
-        Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));
+        Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));;
 
-        contactFromDb.setName(contactDto.getName().get());
+        contactFromDb.setName(contactDto.getName());
         contactFromDb.setEmails(contactDto.getEmails());
         contactFromDb.setPhoneNumbers(contactDto.getPhoneNumbers());
 
@@ -56,5 +58,14 @@ public class ContactService implements ContactApi {
                 new ContactNotFoundException("Contact with id: " + id + " not found"));
 
         return contactMapper.toDto(contact);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void createData(){
+        ContactDto contactDto = new ContactDto();
+        contactDto.setName("testName");
+        contactDto.setEmails(List.of("a@gmail.com", "b@gmail.com"));
+        contactDto.setPhoneNumbers(List.of("+3434243255", "+3803455423"));
+        create(contactDto);
     }
 }

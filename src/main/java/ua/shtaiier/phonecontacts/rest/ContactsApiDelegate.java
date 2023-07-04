@@ -1,17 +1,16 @@
 package ua.shtaiier.phonecontacts.rest;
 
 
-import com.ua.shtaiier.phonecontacts.dto.ContactDto;
-import com.ua.shtaiier.phonecontacts.rest.ContactsManagementApiDelegate;
+import ua.shtaiier.phonecontacts.dto.ContactDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ua.shtaiier.phonecontacts.api.ContactApi;
 
 import java.util.List;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class ContactsApiDelegate implements ContactsManagementApiDelegate {
 

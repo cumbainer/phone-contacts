@@ -1,20 +1,20 @@
 package ua.shtaiier.phonecontacts.domain;
 
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table(schema = "contact_management", name = "contacts")
+@Table(name = "contacts")
 @Data
+@NoArgsConstructor
 public class Contact {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
     @ElementCollection
