@@ -66,56 +66,6 @@ paths:
         400:
           description: Bad Request
 
-  /contacts/new:
-    post:
-      tags:
-        - contactsManagement
-      operationId: addNew
-      description: Add new contact to contact list
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ContactDto"
-      responses:
-        201:
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ContactDto"
-        400:
-          description: Bad Request
-
-  /contacts/{id}/update:
-    put:
-      tags:
-        - contactsManagement
-      operationId: update
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Unique identifier of a contact
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ContactDto"
-      responses:
-        200:
-          description: Updated
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ContactDto"
-        400:
-          description: Bad Request
-
   /contacts/{id}/delete:
     delete:
       tags:
@@ -152,3 +102,11 @@ components:
             type: string
             pattern: ^\+?\d+$
             uniqueItems: true
+    MultipartFile:
+      type: object
+      properties:
+        name:
+          type: string
+        originalFileName:
+          type: string
+

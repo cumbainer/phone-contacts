@@ -1,4 +1,4 @@
-package ua.shtaiier.phonecontacts.api.impl;
+package ua.shtaiier.phonecontacts.api;
 
 
 import jakarta.servlet.ServletOutputStream;
@@ -119,7 +119,7 @@ public class ExcelReportService {
             List<String> formattedEmails = formatField(emails);
             List<String> formattedPhoneContacts = formatField(phoneContacts);
 
-            contactService.create(new ContactDto(name, formattedEmails, formattedPhoneContacts));
+            contactService.create(new ContactDto(name, formattedEmails, formattedPhoneContacts), null);
         }
     }
 

@@ -1,13 +1,16 @@
-package ua.shtaiier.phonecontacts.api.impl;
+package ua.shtaiier.phonecontacts.api;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ua.shtaiier.phonecontacts.api.ContactApi;
+import org.springframework.web.multipart.MultipartFile;
 import ua.shtaiier.phonecontacts.domain.Contact;
+import ua.shtaiier.phonecontacts.domain.Image;
 import ua.shtaiier.phonecontacts.dto.ContactDto;
 import ua.shtaiier.phonecontacts.exception.ContactNotFoundException;
 import ua.shtaiier.phonecontacts.mapper.ContactMapper;
@@ -16,41 +19,48 @@ import ua.shtaiier.phonecontacts.repository.ContactRepository;
 
 @Service
 @RequiredArgsConstructor
-public class ContactService implements ContactApi {
+public class ContactService {
 
     private final ContactRepository contactRepository;
     private final ContactMapper contactMapper;
 
-    @Override
-    public ContactDto create(ContactDto contactDto) {
+    public ContactDto create(ContactDto contactDto, MultipartFile image) {
         Contact contact = contactMapper.toDomain(contactDto);
+
+        if (StringUtils.isNotEmpty(image.getOriginalFilename())) {
+            Image imageEntity = convertImage(image);
+            contact.setImage(imageEntity);
+        }
+
         return contactMapper.toDto(contactRepository.save(contact));
     }
 
-    @Override
-    public ContactDto update(int id, ContactDto contactDto) {
+    public ContactDto update(int id, ContactDto contactDto, MultipartFile image) {
         Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));
 
         contactFromDb.setName(contactDto.getName());
         contactFromDb.setEmails(contactDto.getEmails());
         contactFromDb.setPhoneNumbers(contactDto.getPhoneNumbers());
+        if (StringUtils.isNotEmpty(image.getOriginalFilename())) {
+            contactFromDb.setImage(convertImage(image));
+        }
 
         return contactMapper.toDto(contactRepository.save(contactFromDb));
     }
 
-    @Override
     public void delete(int id) {
+        if(!contactRepository.existsById(id)){
+            throw new ContactNotFoundException("Contact with id: " + id + " not found");
+        }
         contactRepository.deleteById(id);
     }
 
-    @Override
     public Page<ContactDto> getAll(int page, int size) {
         Pageable paging = PageRequest.of(page, size);
         Page<Contact> contacts = contactRepository.findAll(paging);
         return new PageImpl<>(contactMapper.toDtos(contacts.getContent()), paging, contacts.getTotalElements());
     }
 
-    @Override
     public ContactDto get(int id) {
         return getByIdOrThrow(id);
     }
@@ -62,17 +72,14 @@ public class ContactService implements ContactApi {
         return contactMapper.toDto(contact);
     }
 
-//    @EventListener(ApplicationReadyEvent.class)
-//    public void createData(){
-//        ContactDto contactDto = new ContactDto();
-//        contactDto.setName("testName");
-//        contactDto.setEmails(List.of("a@gmail.com", "b@gmail.com"));
-//        contactDto.setPhoneNumbers(List.of("+3434243255", "+3803455423"));
-//        create(contactDto);
-//        ContactDto seocond = new ContactDto();
-//        seocond.setName("testName2");
-//        seocond.setEmails(List.of("a2@gmail.com", "2b@gmail.com"));
-//        seocond.setPhoneNumbers(List.of("+34342432543215", "+38431203455423"));
-//        create(seocond);
-//    }
+    @SneakyThrows
+    private Image convertImage(MultipartFile userImage) {
+        return Image.builder()
+                .bytes(userImage.getBytes())
+                .contentType(userImage.getContentType())
+                .originalFileName(userImage.getOriginalFilename())
+                .size(userImage.getSize())
+                .build();
+    }
+
 }

@@ -190,6 +190,10 @@
                             <token>import org.openapitools.model</token>
                             <value>import ua.shtaiier.phonecontacts.dto</value>
                         </replacement>
+                        <replacement>
+                            <token>import ua.shtaiier.phonecontacts.dto.MultipartFile</token>
+                            <value>import org.springframework.web.multipart.MultipartFile</value>
+                        </replacement>
                     </replacements>
                 </configuration>
             </plugin>
