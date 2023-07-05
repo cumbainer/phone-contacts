@@ -135,6 +135,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -203,7 +208,6 @@
                             </inputSpec>
                             <generatorName>spring</generatorName>
                             <apiPackage>ua.shtaiier.phonecontacts.rest</apiPackage>
-<!--                            <modelPackage>ua.shtaiier.phonecontacts.dto</modelPackage>-->
                             <supportingFilesToGenerate>
                                 ApiUtil.java
                             </supportingFilesToGenerate>

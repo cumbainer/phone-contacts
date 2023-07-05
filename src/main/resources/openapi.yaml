@@ -140,7 +140,6 @@ components:
       properties:
         name:
           type: string
-#          nullable: true
         emails:
           type: array
           items:

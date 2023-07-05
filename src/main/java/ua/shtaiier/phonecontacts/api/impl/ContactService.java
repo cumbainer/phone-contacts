@@ -1,21 +1,17 @@
 package ua.shtaiier.phonecontacts.api.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ua.shtaiier.phonecontacts.dto.ContactDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import ua.shtaiier.phonecontacts.api.ContactApi;
 import ua.shtaiier.phonecontacts.domain.Contact;
+import ua.shtaiier.phonecontacts.dto.ContactDto;
 import ua.shtaiier.phonecontacts.exception.ContactNotFoundException;
 import ua.shtaiier.phonecontacts.mapper.ContactMapper;
 import ua.shtaiier.phonecontacts.repository.ContactRepository;
-
-import java.util.List;
 
 
 @Service
@@ -66,12 +62,17 @@ public class ContactService implements ContactApi {
         return contactMapper.toDto(contact);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void createData(){
-        ContactDto contactDto = new ContactDto();
-        contactDto.setName("testName");
-        contactDto.setEmails(List.of("a@gmail.com", "b@gmail.com"));
-        contactDto.setPhoneNumbers(List.of("+3434243255", "+3803455423"));
-        create(contactDto);
-    }
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void createData(){
+//        ContactDto contactDto = new ContactDto();
+//        contactDto.setName("testName");
+//        contactDto.setEmails(List.of("a@gmail.com", "b@gmail.com"));
+//        contactDto.setPhoneNumbers(List.of("+3434243255", "+3803455423"));
+//        create(contactDto);
+//        ContactDto seocond = new ContactDto();
+//        seocond.setName("testName2");
+//        seocond.setEmails(List.of("a2@gmail.com", "2b@gmail.com"));
+//        seocond.setPhoneNumbers(List.of("+34342432543215", "+38431203455423"));
+//        create(seocond);
+//    }
 }

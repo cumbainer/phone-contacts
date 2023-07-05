@@ -8,8 +8,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ContactNotFoundException.class)
     public String handleContactNotFoundException(ContactNotFoundException exception){
-
-        //todo implement
-        return "";
+        return exception.getMessage();
     }
 }
