@@ -2,6 +2,8 @@ package ua.shtaiier.phonecontacts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -17,16 +19,24 @@ import ua.shtaiier.phonecontacts.exception.ContactNotFoundException;
 import ua.shtaiier.phonecontacts.mapper.AccountMapper;
 import ua.shtaiier.phonecontacts.mapper.ContactMapper;
 import ua.shtaiier.phonecontacts.repository.ContactRepository;
+import ua.shtaiier.phonecontacts.validation.existingValidation.emails.EmailValidator;
+import ua.shtaiier.phonecontacts.validation.existingValidation.phoneNumbers.PhoneNumberValidator;
+
+import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ContactService {
 
     private final ContactRepository contactRepository;
     private final AccountService accountService;
     private final ContactMapper contactMapper;
     private final AccountMapper accountMapper;
+    private final EmailValidator emailValidator;
+    private final PhoneNumberValidator phoneNumberValidator;
+
 
     public ContactDto create(ContactDto contactDto, MultipartFile image) {
         Contact contact = contactMapper.toDomain(contactDto);
@@ -36,12 +46,16 @@ public class ContactService {
             contact.setImage(imageEntity);
         }
 
+        validateData(contact.getPhoneNumbers(), contact.getEmails());
+
         contact.setAccount(accountMapper.toDomain(accountService.getById(contactDto.getAccountId())));
         return contactMapper.toDto(contactRepository.save(contact));
     }
 
     public ContactDto update(int id, ContactDto contactDto, MultipartFile image) {
         Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));
+
+        validateData(contactFromDb.getPhoneNumbers(), contactFromDb.getEmails());
 
         contactFromDb.setName(contactDto.getName());
         contactFromDb.setEmails(contactDto.getEmails());
@@ -69,6 +83,20 @@ public class ContactService {
 
     public ContactDto get(int id) {
         return getByIdOrThrow(id);
+    }
+
+
+    //Validates only first email and phone, because there is no solid FREE bulk(2+ more records) validators
+    private void validateData(List<String> phoneNumbers, List<String> emails) {
+
+        if (CollectionUtils.isNotEmpty(phoneNumbers)) {
+            boolean validPhone = phoneNumberValidator.validate(phoneNumbers.get(0));
+            phoneNumbers.removeIf(phoneNumber -> !validPhone);
+        }
+        if (CollectionUtils.isNotEmpty(emails)) {
+            boolean validEmail = emailValidator.validate(emails.get(0));
+            emails.removeIf(email -> !validEmail);
+        }
     }
 
     private ContactDto getByIdOrThrow(int id) {

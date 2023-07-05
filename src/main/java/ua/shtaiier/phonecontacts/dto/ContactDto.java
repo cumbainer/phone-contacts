@@ -3,8 +3,8 @@ package ua.shtaiier.phonecontacts.dto;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ua.shtaiier.phonecontacts.validation.ValidateData;
-import ua.shtaiier.phonecontacts.validation.ValidationType;
+import ua.shtaiier.phonecontacts.validation.formatValidation.ValidateData;
+import ua.shtaiier.phonecontacts.validation.formatValidation.ValidationType;
 
 import java.util.List;
 
