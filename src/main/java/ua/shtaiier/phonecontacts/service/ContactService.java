@@ -1,4 +1,4 @@
-package ua.shtaiier.phonecontacts.api;
+package ua.shtaiier.phonecontacts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

@@ -1,13 +1,12 @@
 openapi: 3.0.3
 info:
   title: Phone Contacts Management
-#  description: todo
+  description: Phone-contacts app openapi documentation
   version: 1.0.0
 servers:
   - url: 'http://localhost:3030/api/v1'
 tags:
-#  - name: security-management
-#    description: Consist of creating an account and login
+  - name: accountManagement
   - name: contactsManagement
     description: Basic CRUD for contacts management
 paths:
@@ -82,6 +81,26 @@ paths:
           description: Successfully deleted
         400:
           description: Invalid Id
+  /accounts/new:
+    post:
+      tags:
+        - accountManagement
+      operationId: createAccount
+      requestBody:
+        description: Account info
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountDto"
+      responses:
+        201:
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountDto"
+
 
 components:
   schemas:
@@ -109,4 +128,16 @@ components:
           type: string
         originalFileName:
           type: string
+    AccountDto:
+      type: object
+      properties:
+        username:
+          type: string
+          nullable: false
+        password:
+          type: string
+          nullable: false
+
+
+
 

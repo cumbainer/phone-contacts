@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ua.shtaiier.phonecontacts.api.ContactService;
+import ua.shtaiier.phonecontacts.service.ContactService;
 import ua.shtaiier.phonecontacts.dto.ContactDto;
 
 import java.util.List;

@@ -4,12 +4,13 @@ package ua.shtaiier.phonecontacts.rest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ua.shtaiier.phonecontacts.api.ContactService;
-import ua.shtaiier.phonecontacts.api.ExcelReportService;
 import ua.shtaiier.phonecontacts.dto.ContactDto;
+import ua.shtaiier.phonecontacts.service.ContactService;
+import ua.shtaiier.phonecontacts.service.ExcelReportService;
 
 import java.util.List;
 import java.util.Map;
@@ -39,11 +40,11 @@ public class ContactsController {
         return excelReportService.importData(file);
     }
 
-
     @PostMapping("/new")
     public ResponseEntity<ContactDto> addNew(@ModelAttribute @Valid ContactDto contactDto,
                                              @RequestParam(required = false) MultipartFile image) {
-        return ResponseEntity.ok(contactService.create(contactDto, image));
+
+        return new ResponseEntity<>(contactService.create(contactDto, image), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/update")
