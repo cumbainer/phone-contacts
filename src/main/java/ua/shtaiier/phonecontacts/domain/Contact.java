@@ -16,6 +16,7 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Column(unique = true)
     private String name;
     @ElementCollection
     private List<String> emails;

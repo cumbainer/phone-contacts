@@ -2,7 +2,6 @@ package ua.shtaiier.phonecontacts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +26,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ContactService {
 
     private final ContactRepository contactRepository;
@@ -38,7 +36,7 @@ public class ContactService {
     private final PhoneNumberValidator phoneNumberValidator;
 
 
-    public ContactDto create(ContactDto contactDto, MultipartFile image) {
+    public ContactDto create(ContactDto contactDto, MultipartFile image, boolean skipValidating) {
         Contact contact = contactMapper.toDomain(contactDto);
 
         if (ObjectUtils.isNotEmpty(image) && StringUtils.isNotEmpty(image.getOriginalFilename())) {
@@ -46,7 +44,9 @@ public class ContactService {
             contact.setImage(imageEntity);
         }
 
-        validateData(contact.getPhoneNumbers(), contact.getEmails());
+        if(!skipValidating) {
+            validateData(contact.getPhoneNumbers(), contact.getEmails());
+        }
 
         contact.setAccount(accountMapper.toDomain(accountService.getById(contactDto.getAccountId())));
         return contactMapper.toDto(contactRepository.save(contact));
@@ -55,8 +55,6 @@ public class ContactService {
     public ContactDto update(int id, ContactDto contactDto, MultipartFile image) {
         Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));
 
-        validateData(contactFromDb.getPhoneNumbers(), contactFromDb.getEmails());
-
         contactFromDb.setName(contactDto.getName());
         contactFromDb.setEmails(contactDto.getEmails());
         contactFromDb.setPhoneNumbers(contactDto.getPhoneNumbers());
@@ -64,6 +62,8 @@ public class ContactService {
         if (StringUtils.isNotEmpty(image.getOriginalFilename())) {
             contactFromDb.setImage(convertImage(image));
         }
+
+        validateData(contactFromDb.getPhoneNumbers(), contactFromDb.getEmails());
 
         return contactMapper.toDto(contactRepository.save(contactFromDb));
     }

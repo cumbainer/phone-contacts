@@ -64,7 +64,6 @@ public class ExcelReportService {
         ServletOutputStream outputStream = response.getOutputStream();
         workbook.write(outputStream);
         workbook.close();
-        outputStream.close();
     }
 
     public List<Map<String, String>> importData(MultipartFile file, int accountId) throws Exception {
@@ -114,7 +113,7 @@ public class ExcelReportService {
 
             ContactDto contactDto = new ContactDto(name, formattedEmails, formattedPhoneContacts);
             contactDto.setAccountId(accountId);
-            contactService.create(contactDto, null);
+            contactService.create(contactDto, null, true);
         }
     }
 

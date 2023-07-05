@@ -3,6 +3,7 @@ package ua.shtaiier.phonecontacts.validation.existingValidation.emails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.Unirest;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import ua.shtaiier.phonecontacts.validation.existingValidation.InfoValidator;
@@ -11,7 +12,8 @@ import ua.shtaiier.phonecontacts.validation.existingValidation.InfoValidator;
 @Component
 public class EmailValidator implements InfoValidator {
 
-    private static final String API_KEY = "a4f424ba295049aea2de064f2fb6fb3f";
+    @Value("${emailValidationApikey}")
+    private String API_KEY;
 
     @SneakyThrows
     private EmailValidationResponse invokeApi(String email) {

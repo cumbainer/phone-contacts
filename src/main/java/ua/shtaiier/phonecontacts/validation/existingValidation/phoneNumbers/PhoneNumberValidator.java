@@ -2,6 +2,7 @@ package ua.shtaiier.phonecontacts.validation.existingValidation.phoneNumbers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import ua.shtaiier.phonecontacts.validation.existingValidation.InfoValidator;
@@ -15,7 +16,8 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class PhoneNumberValidator implements InfoValidator {
 
-    private static final String API_KEY = "ef2509e2bd186c36b25af4622eabcce3";
+    @Value("${phoneValidationApikey}")
+    private String API_KEY;
 
     @SneakyThrows
     private PhoneNumberValidationApiResponse invokeApi(String phoneNumber) {
