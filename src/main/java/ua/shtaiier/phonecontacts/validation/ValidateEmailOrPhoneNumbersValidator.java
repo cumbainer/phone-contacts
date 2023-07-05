@@ -19,7 +19,6 @@ public class ValidateEmailOrPhoneNumbersValidator implements ConstraintValidator
         if (values == null) {
             return true;
         }
-
         return switch (validationType) {
             case EMAIL -> validateEmails(values);
             case PHONE_NUMBERS -> validatePhoneNumbers(values);

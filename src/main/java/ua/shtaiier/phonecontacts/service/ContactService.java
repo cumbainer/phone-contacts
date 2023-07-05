@@ -2,6 +2,7 @@ package ua.shtaiier.phonecontacts.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +14,7 @@ import ua.shtaiier.phonecontacts.domain.Contact;
 import ua.shtaiier.phonecontacts.domain.Image;
 import ua.shtaiier.phonecontacts.dto.ContactDto;
 import ua.shtaiier.phonecontacts.exception.ContactNotFoundException;
+import ua.shtaiier.phonecontacts.mapper.AccountMapper;
 import ua.shtaiier.phonecontacts.mapper.ContactMapper;
 import ua.shtaiier.phonecontacts.repository.ContactRepository;
 
@@ -22,16 +24,19 @@ import ua.shtaiier.phonecontacts.repository.ContactRepository;
 public class ContactService {
 
     private final ContactRepository contactRepository;
+    private final AccountService accountService;
     private final ContactMapper contactMapper;
+    private final AccountMapper accountMapper;
 
     public ContactDto create(ContactDto contactDto, MultipartFile image) {
         Contact contact = contactMapper.toDomain(contactDto);
 
-        if (StringUtils.isNotEmpty(image.getOriginalFilename())) {
+        if (ObjectUtils.isNotEmpty(image) && StringUtils.isNotEmpty(image.getOriginalFilename())) {
             Image imageEntity = convertImage(image);
             contact.setImage(imageEntity);
         }
 
+        contact.setAccount(accountMapper.toDomain(accountService.getById(contactDto.getAccountId())));
         return contactMapper.toDto(contactRepository.save(contact));
     }
 
@@ -41,6 +46,7 @@ public class ContactService {
         contactFromDb.setName(contactDto.getName());
         contactFromDb.setEmails(contactDto.getEmails());
         contactFromDb.setPhoneNumbers(contactDto.getPhoneNumbers());
+        contactFromDb.setAccount(accountMapper.toDomain(accountService.getById(contactDto.getAccountId())));
         if (StringUtils.isNotEmpty(image.getOriginalFilename())) {
             contactFromDb.setImage(convertImage(image));
         }
@@ -49,7 +55,7 @@ public class ContactService {
     }
 
     public void delete(int id) {
-        if(!contactRepository.existsById(id)){
+        if (!contactRepository.existsById(id)) {
             throw new ContactNotFoundException("Contact with id: " + id + " not found");
         }
         contactRepository.deleteById(id);

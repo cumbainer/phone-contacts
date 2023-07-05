@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ua.shtaiier.phonecontacts.common.ExcelImportUtil;
@@ -18,6 +19,7 @@ import ua.shtaiier.phonecontacts.dto.ContactDto;
 import ua.shtaiier.phonecontacts.exception.ContactNotFoundException;
 import ua.shtaiier.phonecontacts.mapper.ContactMapper;
 import ua.shtaiier.phonecontacts.repository.ContactRepository;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,15 +27,6 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +42,7 @@ public class ExcelReportService {
     public void export(HttpServletResponse response) {
 
         List<ContactDto> contacts = contactMapper.toDtos(contactRepository.findAll());
-        if(CollectionUtils.isEmpty(contacts)){
+        if (CollectionUtils.isEmpty(contacts)) {
             throw new ContactNotFoundException("No contacts found to generate");
         }
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -74,7 +67,7 @@ public class ExcelReportService {
         outputStream.close();
     }
 
-    public List<Map<String, String>> importData(MultipartFile file) throws Exception {
+    public List<Map<String, String>> importData(MultipartFile file, int accountId) throws Exception {
 
         Path tempDir = Files.createTempDirectory("");
         File tempFile = tempDir.resolve(Objects.requireNonNull(file.getOriginalFilename())).toFile();
@@ -83,7 +76,7 @@ public class ExcelReportService {
         Workbook workbook = WorkbookFactory.create(tempFile);
         Sheet sheet = workbook.getSheetAt(0);
 
-        if (sheet.getPhysicalNumberOfRows() == 0  || workbook.getNumberOfSheets() == 0) {
+        if (sheet.getPhysicalNumberOfRows() == 0 || workbook.getNumberOfSheets() == 0) {
             return Collections.emptyList();
         }
 
@@ -105,12 +98,12 @@ public class ExcelReportService {
                             .collect(Collectors.toMap(headerCells::get, cellList::get));
                 })
                 .toList();
-        formatAndCreate(importedResponse);
+        formatAndCreate(importedResponse, accountId);
 
         return importedResponse;
     }
 
-    public void formatAndCreate(List<Map<String, String>> importedData) {
+    public void formatAndCreate(List<Map<String, String>> importedData, int accountId) {
         for (Map<String, String> contact : importedData) {
             String name = contact.get("Name");
             String emails = contact.get("Emails");
@@ -119,7 +112,9 @@ public class ExcelReportService {
             List<String> formattedEmails = formatField(emails);
             List<String> formattedPhoneContacts = formatField(phoneContacts);
 
-            contactService.create(new ContactDto(name, formattedEmails, formattedPhoneContacts), null);
+            ContactDto contactDto = new ContactDto(name, formattedEmails, formattedPhoneContacts);
+            contactDto.setAccountId(accountId);
+            contactService.create(contactDto, null);
         }
     }
 

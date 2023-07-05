@@ -21,6 +21,7 @@ public class ContactDto {
             message = "Invalid phone format. Correct format is: +[COUNTRY_CODE][YOUR_NUMBER] ")
     private List<String> phoneNumbers;
     private ImageDto imageDto;
+    private Integer accountId;
 
     public ContactDto(String name, List<String> emails, List<String> phoneNumbers) {
         this.name = name;

@@ -14,6 +14,7 @@ public interface ContactMapper extends BaseMapper<Contact, ContactDto> {
     Contact toDomain(ContactDto dto);
 
     @Mapping(target = "imageDto", source = "image")
+    @Mapping(target = "accountId", source = "account.id")
     ContactDto toDto(Contact entity);
 
 }

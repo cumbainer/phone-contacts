@@ -23,5 +23,8 @@ public class Contact {
     private List<String> phoneNumbers;
     @OneToOne(cascade = CascadeType.ALL)
     private Image image;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
 }
