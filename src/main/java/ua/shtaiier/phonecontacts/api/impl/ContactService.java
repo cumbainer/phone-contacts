@@ -1,5 +1,9 @@
 package ua.shtaiier.phonecontacts.api.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ua.shtaiier.phonecontacts.dto.ContactDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -29,7 +33,7 @@ public class ContactService implements ContactApi {
 
     @Override
     public ContactDto update(int id, ContactDto contactDto) {
-        Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));;
+        Contact contactFromDb = contactMapper.toDomain(getByIdOrThrow(id));
 
         contactFromDb.setName(contactDto.getName());
         contactFromDb.setEmails(contactDto.getEmails());
@@ -44,8 +48,10 @@ public class ContactService implements ContactApi {
     }
 
     @Override
-    public List<ContactDto> getAll() {
-        return contactMapper.toDtos(contactRepository.findAll());
+    public Page<ContactDto> getAll(int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<Contact> contacts = contactRepository.findAll(paging);
+        return new PageImpl<>(contactMapper.toDtos(contacts.getContent()), paging, contacts.getTotalElements());
     }
 
     @Override

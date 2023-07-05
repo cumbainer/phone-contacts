@@ -1,8 +1,7 @@
 package ua.shtaiier.phonecontacts.api;
 
+import org.springframework.data.domain.Page;
 import ua.shtaiier.phonecontacts.dto.ContactDto;
-
-import java.util.List;
 
 public interface ContactApi {
 
@@ -12,7 +11,8 @@ public interface ContactApi {
 
     void delete(int id);
 
-    List<ContactDto> getAll();
+    Page<ContactDto> getAll(int page, int size);
 
     ContactDto get(int id);
+
 }

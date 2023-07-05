@@ -33,8 +33,8 @@ public class ContactsApiDelegate implements ContactsManagementApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<ContactDto>> getAll() {
-        return ResponseEntity.ok(contactApi.getAll());
+    public ResponseEntity<List<ContactDto>> getAll(Integer page, Integer size) {
+        return ResponseEntity.ok(contactApi.getAll(page, size).getContent());
     }
 
     @Override

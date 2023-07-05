@@ -17,6 +17,21 @@ paths:
         - contactsManagement
       summary: Get all contacts
       operationId: getAll
+      parameters:
+        - name: page
+          in: query
+          description: page number
+          required: false
+          schema:
+            default: 0
+            type: integer
+        - name: size
+          in: query
+          description: page size
+          required: false
+          schema:
+            default: 10
+            type: integer
       responses:
         200:
           description: Success

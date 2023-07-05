@@ -9,5 +9,4 @@ import ua.shtaiier.phonecontacts.domain.Contact;
 @Mapper(componentModel = "spring")
 public interface ContactMapper extends BaseMapper<Contact, ContactDto> {
 
-
 }
