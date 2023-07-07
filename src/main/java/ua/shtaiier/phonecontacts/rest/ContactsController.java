@@ -73,7 +73,7 @@ public class ContactsController {
     }
 
     @GetMapping("/{id}/image")
-    private ResponseEntity<?> getImage(@PathVariable Integer id) {
+    public ResponseEntity<?> getImage(@PathVariable Integer id) {
         ImageDto image = imageService.getById(id);
 
         return ResponseEntity.ok().contentType(MediaType.valueOf(image.getContentType())).contentLength(image.getSize())
