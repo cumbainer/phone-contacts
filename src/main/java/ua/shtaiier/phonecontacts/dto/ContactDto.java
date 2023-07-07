@@ -15,7 +15,7 @@ public class ContactDto {
     private Integer id;
     @NotEmpty(message = "Name is required")
     private String name;
-    @ValidateData(type = ValidationType.EMAIL, message = "One on more emails with invalid formats was found")
+    @ValidateData(type = ValidationType.EMAIL, message = "One or more emails with invalid formats was found")
     private List<String> emails;
     @ValidateData(type = ValidationType.PHONE_NUMBERS,
             message = "Invalid phone format. Correct format is: +[COUNTRY_CODE][YOUR_NUMBER] ")

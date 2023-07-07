@@ -3,8 +3,12 @@ spring:
     url: ${DB_URI:jdbc:postgresql://localhost:5432/contacts}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: create
 server:
   port: 3030
 
-phoneValidationApikey: ${PV_API_KEY:ef2509e2bd186c36b25af4622eabcce3}
-emailValidationApikey: ${EV_API_KEY:a4f424ba295049aea2de064f2fb6fb3f}
+#Reseted api keys which both has around 95 calls left
+phoneValidationApikey: ${PV_API_KEY:314eaaf5f7e04bbcd770f81597cf7ee1}
+emailValidationApikey: ${EV_API_KEY:9d00d0f5fb1e4a1785cfa59a89127809}
