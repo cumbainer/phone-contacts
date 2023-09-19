@@ -2,7 +2,7 @@
 
 ## Description
 
-A small REST API that includes contacts management, such as basic CRUD, import/export to/from Excel, upload an image, view images of contacts and more
+A basic REST API that includes contacts management, such as basic CRUD, import/export to/from Excel, upload an image, view images of contacts and more
 
 Application:
 * Java 17
